@@ -75,7 +75,7 @@ class EventForm extends Component {
             />
           </Form.Field>
           <Form.Field>
-            <label>Event Date</label>
+            <label>Event Venue</label>
             <input
               name="venue"
               value={event.venue}
