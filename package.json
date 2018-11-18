@@ -18,11 +18,17 @@
 		"lint:fix": "eslint --fix . --ext .js"
 	},
 	"devDependencies": {
+		"cuid": "^2.1.4",
 		"eslint-plugin-prettier": "^2.6.0",
 		"prettier": "^1.12.1"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
 	},
-	"browserslist": [ ">0.2%", "not dead", "not ie <= 11", "not op_mini all" ]
+	"browserslist": [
+		">0.2%",
+		"not dead",
+		"not ie <= 11",
+		"not op_mini all"
+	]
 }
