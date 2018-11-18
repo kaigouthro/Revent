@@ -71,16 +71,19 @@ class EventDashboard extends Component {
           />
         </Grid.Column>
         <Grid.Column width={6}>
-          <Button positive content="Create Event" onClick={this.handleFormOpen}>
-            {this.state.isOpen && (
-              <EventForm
-                selectedEvent={this.state.selectedEvent}
-                createEvent={this.handleCreateEvent}
-                updateEvent={this.handleUpdateEvent}
-                handleCancel={this.handleCancel}
-              />
-            )}
-          </Button>
+          <Button
+            positive
+            content="Create Event"
+            onClick={this.handleFormOpen}
+          />
+          {this.state.isOpen && (
+            <EventForm
+              selectedEvent={this.state.selectedEvent}
+              createEvent={this.handleCreateEvent}
+              updateEvent={this.handleUpdateEvent}
+              handleCancel={this.handleCancel}
+            />
+          )}
         </Grid.Column>
       </Grid>
     )

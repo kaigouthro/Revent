@@ -14,7 +14,8 @@ const EventListItem = ({ event, onViewEvent, onDeleteEvent }) => {
     attendees
   } = event
 
-  const renderAttendees = () =>
+  const renderAttendees = attendees =>
+    attendees &&
     attendees.map(attendee => (
       <EventListAttendee key={attendee.id} attendee={attendee} />
     ))
@@ -41,7 +42,7 @@ const EventListItem = ({ event, onViewEvent, onDeleteEvent }) => {
         </span>
       </Segment>
       <Segment secondary>
-        <List horizontal>{renderAttendees()}</List>
+        <List horizontal>{renderAttendees(attendees)}</List>
       </Segment>
       <Segment clearing>
         <span>{description}</span>
@@ -50,14 +51,14 @@ const EventListItem = ({ event, onViewEvent, onDeleteEvent }) => {
           color="teal"
           floated="right"
           content="View"
-          onClick={onViewEvent(event)}
+          onClick={() => onViewEvent(event)}
         />
         <Button
           as="a"
           color="red"
           floated="right"
           content="Delete"
-          onClick={onDeleteEvent(event.id)}
+          onClick={() => onDeleteEvent(event.id)}
         />
       </Segment>
     </Segment.Group>
