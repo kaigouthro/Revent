@@ -29,7 +29,7 @@ class EventForm extends Component {
     e.preventDefault()
 
     const { event } = this.state
-    const { handleCreateEvent, handleUpdateEvent } = this.props
+    const { createEvent, updateEvent } = this.props
     event.id ? updateEvent(event) : createEvent(event)
   }
 
