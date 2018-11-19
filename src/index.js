@@ -1,26 +1,32 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import { BrowserRouter } from "react-router-dom"
-import App from "./app/layout/App"
+import { Provider } from "react-redux"
 
+import App from "./app/layout/App"
+import { configureStore } from "./app/store/configureStore"
 import * as serviceWorker from "./serviceWorker"
 import "semantic-ui-css/semantic.min.css"
 import "./index.css"
 
-const render = () => {
+const renderApp = () => {
+  const store = configureStore()
+  const rootElem = document.getElementById("root")
   ReactDOM.render(
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>,
-    document.getElementById("root")
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>,
+    rootElem
   )
 }
 
 if (module.hot) {
   module.hot.accept("./app/layout/App", () => {
-    setTimeout(render)
+    setTimeout(renderApp)
   })
 }
 
-render()
+renderApp()
 serviceWorker.unregister()

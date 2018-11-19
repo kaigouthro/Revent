@@ -1,4 +1,5 @@
 import React from "react"
+import { Link } from "react-router-dom"
 import { Segment, Item, Icon, Button, List } from "semantic-ui-react"
 
 import EventListAttendee from "./EventListAttendee"
@@ -27,7 +28,9 @@ const EventListItem = ({ event, onViewEvent, onDeleteEvent }) => {
           <Item>
             <Item.Image size="tiny" circular src={hostPhotoURL} />
             <Item.Content>
-              <Item.Header as="a">{title}</Item.Header>
+              <Item.Header as={Link} to={`/event/${event.id}`}>
+                {title}
+              </Item.Header>
               <Item.Description>
                 Hosted by <button>{hostedBy}</button>
               </Item.Description>
