@@ -5,10 +5,12 @@
   "dependencies": {
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
+    "react-router-dom": "^4.2.2",
     "react-scripts": "2.1.1",
+    "redux": "^4.0.1",
+    "cuid": "^2.1.4",
     "semantic-ui-css": "^2.3.1",
-    "semantic-ui-react": "^0.80.0",
-    "react-router-dom": "^4.2.2"
+    "semantic-ui-react": "^0.80.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -19,7 +21,6 @@
     "lint:fix": "eslint --fix . --ext .js"
   },
   "devDependencies": {
-    "cuid": "^2.1.4",
     "eslint-plugin-prettier": "^2.6.0",
     "prettier": "^1.12.1"
   },
