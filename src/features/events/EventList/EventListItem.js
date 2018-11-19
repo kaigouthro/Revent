@@ -4,7 +4,7 @@ import { Segment, Item, Icon, Button, List } from "semantic-ui-react"
 
 import EventListAttendee from "./EventListAttendee"
 
-const EventListItem = ({ event, onViewEvent, onDeleteEvent }) => {
+const EventListItem = ({ event, onDeleteEvent }) => {
   const {
     title,
     date,
@@ -50,11 +50,11 @@ const EventListItem = ({ event, onViewEvent, onDeleteEvent }) => {
       <Segment clearing>
         <span>{description}</span>
         <Button
-          as="a"
+          as={Link}
+          to={`/event/${event.id}`}
           color="teal"
           floated="right"
           content="View"
-          onClick={() => onViewEvent(event)}
         />
         <Button
           as="a"
