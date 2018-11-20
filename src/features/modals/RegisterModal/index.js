@@ -2,10 +2,10 @@ import React from "react"
 import { connect } from "react-redux"
 import { Modal } from "semantic-ui-react"
 
-import RegisterForm from "../auth/Login/RegisterForm"
-import { closeModal } from "./modalActions"
+import RegisterForm from "../../auth/RegisterForm"
+import { closeModal } from "../modalActions"
 
-const RegisterForm = () => (
+const RegisterModal = ({ closeModal }) => (
   <Modal size="mini" open={true} onClose={closeModal}>
     <Modal.Header>Sign Up to Re-vents!</Modal.Header>
     <Modal.Content>
@@ -19,4 +19,4 @@ const RegisterForm = () => (
 export default connect(
   null,
   { closeModal }
-)(RegisterForm)
+)(RegisterModal)

@@ -10,7 +10,7 @@ const openModal = (state, { modalType, modalProps }) => ({
 
 const closeModal = (state, payload) => null
 
-export default createReducer((state = initialModal), {
+export default createReducer(initialModal, {
   [MODAL_OPEN]: openModal,
   [MODAL_CLOSE]: closeModal
 })

@@ -9,11 +9,13 @@ import UserDetail from "../../features/user/UserDetail"
 import EventDashboard from "../../features/events/EventDashboard"
 import EventDetail from "../../features/events/EventDetail"
 import EventForm from "../../features/events/EventForm"
+import ModalManager from "../../features/modals/ModalManager"
 import NotFound from "./NotFound"
 import Home from "../../features/home"
 
 const App = () => (
   <div>
+    <ModalManager />
     <Switch>
       <Route exact path="/" component={Home} />
     </Switch>
