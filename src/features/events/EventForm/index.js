@@ -9,7 +9,7 @@ import Script from "react-load-script"
 import { googleApiKey } from "../../../app/config/keys"
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete"
 
-import { category } from "../eventData"
+import { category } from "../../../app/data/eventData"
 import { createEvent, updateEvent } from "../eventActions"
 import { validate } from "../../../app/common/form/formValidate"
 import TextInput from "../../../app/common/form/TextInput"
