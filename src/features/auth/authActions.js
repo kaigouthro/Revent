@@ -1,4 +1,3 @@
-import { SIGNOUT_USER } from "./authConstants"
 import { SubmissionError, reset } from "redux-form"
 import { toastr } from "react-redux-toastr"
 import { closeModal } from "../modals/modalActions"
@@ -96,5 +95,3 @@ export const updatePassword = credential => async (
     })
   }
 }
-
-export const signOutUser = () => ({ type: SIGNOUT_USER })
