@@ -1,12 +1,14 @@
 import firebase from "firebase"
+import "firebase/firestore"
+import { firebaseApiKey, messagingSenderId } from "../config/keys"
 
 const firebaseConfig = {
-  apiKey: "AIzaSyApYR0Kp50TTRFtF0wCpRUF48b-BhbFaPI",
+  apiKey: firebaseApiKey,
   authDomain: "revents-1542681296646.firebaseapp.com",
   databaseURL: "https://revents-1542681296646.firebaseio.com",
   projectId: "revents-1542681296646",
   storageBucket: "revents-1542681296646.appspot.com",
-  messagingSenderId: "58774534961"
+  messagingSenderId: messagingSenderId
 }
 
 firebase.initializeApp(firebaseConfig)

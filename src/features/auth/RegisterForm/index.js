@@ -1,37 +1,56 @@
 import React from "react"
+import { connect } from "react-redux"
+import { combineValidators, isRequired } from "revalidate"
 import { reduxForm, Field } from "redux-form"
-import { Form, Segment, Button } from "semantic-ui-react"
+import { Form, Segment, Button, Divider } from "semantic-ui-react"
 
+import { registerUser } from "../authActions"
 import TextInput from "../../../app/common/form/TextInput"
+import SocialLogin from "../SocialLogin"
 
-const RegisterForm = ({ handleSubmit }) => {
-  return (
-    <Form size="large">
-      <Segment>
-        <Field
-          name="displayName"
-          component={TextInput}
-          type="text"
-          placeholder="Known As"
-        />
-        <Field
-          name="email"
-          component={TextInput}
-          type="text"
-          placeholder="Email"
-        />
-        <Field
-          name="password"
-          component={TextInput}
-          type="text"
-          placeholder="Password"
-        />
-        <Button fluid size="large" color="teal">
-          Register
-        </Button>
-      </Segment>
-    </Form>
-  )
-}
+const validate = combineValidators({
+  displayName: isRequired("User Display Name"),
+  email: isRequired("Email"),
+  password: isRequired("Password")
+})
 
-export default reduxForm({ form: "RegisterForm" })(RegisterForm)
+const RegisterForm = ({
+  handleSubmit,
+  registerUser,
+  error,
+  invalid,
+  submitting
+}) => (
+  <Form size="large" onSubmit={handleSubmit(registerUser)}>
+    <Segment>
+      <Field
+        name="displayName"
+        component={TextInput}
+        type="text"
+        placeholder="Known As"
+      />
+      <Field
+        name="email"
+        component={TextInput}
+        type="text"
+        placeholder="Email"
+      />
+      <Field
+        name="password"
+        component={TextInput}
+        type="password"
+        placeholder="Password"
+      />
+      <Button disabled={invalid || submitting} fluid size="large" color="teal">
+        Register
+      </Button>
+      <Divider horizontal>OR</Divider>
+      <SocialLogin />
+    </Segment>
+  </Form>
+)
+
+export default connect(
+  null,
+  { registerUser }
+)(reduxForm({ form: "RegisterForm", validate })(RegisterForm))
