@@ -1,7 +1,6 @@
 import React from "react"
-import { connect } from "react-redux"
 import { Field, reduxForm } from "redux-form"
-import moment from "moment"
+import { subYears } from "date-fns"
 import { Segment, Form, Header, Divider, Button } from "semantic-ui-react"
 
 import DateInput from "../../../app/common/form/DateInput"
@@ -10,7 +9,6 @@ import TextInput from "../../../app/common/form/TextInput"
 import RadioInput from "../../../app/common/form/RadioInput"
 
 import { updateProfile } from "../../auth/authActions"
-import { subYears } from "date-fns"
 
 const BasicPage = ({ handleSubmit, updateProfile, pristine, submitting }) => (
   <Segment>
@@ -68,13 +66,8 @@ const BasicPage = ({ handleSubmit, updateProfile, pristine, submitting }) => (
   </Segment>
 )
 
-export default connect(
-  null,
-  { updateProfile }
-)(
-  reduxForm({
-    form: "userProfile",
-    enableReinitialize: true,
-    destroyOnUnmount: false
-  })(BasicPage)
-)
+export default reduxForm({
+  form: "userProfile",
+  enableReinitialize: true,
+  destroyOnUnmount: false
+})(BasicPage)

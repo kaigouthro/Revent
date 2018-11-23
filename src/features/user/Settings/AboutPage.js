@@ -1,5 +1,4 @@
 import React from "react"
-import { connect } from "react-redux"
 import { Field, reduxForm } from "redux-form"
 import { Segment, Divider, Form, Header, Button } from "semantic-ui-react"
 
@@ -83,13 +82,8 @@ const AboutPage = ({ updateProfile, handleSubmit, pristine, submitting }) => (
   </Segment>
 )
 
-export default connect(
-  null,
-  { updateProfile }
-)(
-  reduxForm({
-    form: "userProfile",
-    enableReinitialize: true,
-    destroyOnUnmount: false
-  })(AboutPage)
-)
+export default reduxForm({
+  form: "userProfile",
+  enableReinitialize: true,
+  destroyOnUnmount: false
+})(AboutPage)
