@@ -95,3 +95,17 @@ export const updatePassword = credential => async (
     })
   }
 }
+
+export const updateProfile = user => async (
+  dispatch,
+  getState,
+  { getFirebase }
+) => {
+  const firebase = getFirebase()
+  try {
+    await firebase.updateProfile(user)
+    toastr.success("Success", "Profile updated!")
+  } catch (err) {
+    console.log(err)
+  }
+}
