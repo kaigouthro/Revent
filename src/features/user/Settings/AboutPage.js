@@ -9,7 +9,6 @@ import SelectInput from "../../../app/common/form/SelectInput"
 import RadioInput from "../../../app/common/form/RadioInput"
 
 import { interests } from "../../../app/data/eventData"
-import { updateProfile } from "../../auth/authActions"
 
 const AboutPage = ({ updateProfile, handleSubmit, pristine, submitting }) => (
   <Segment>

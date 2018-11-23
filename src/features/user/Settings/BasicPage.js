@@ -8,8 +8,6 @@ import PlaceInput from "../../../app/common/form/PlaceInput"
 import TextInput from "../../../app/common/form/TextInput"
 import RadioInput from "../../../app/common/form/RadioInput"
 
-import { updateProfile } from "../../auth/authActions"
-
 const BasicPage = ({ handleSubmit, updateProfile, pristine, submitting }) => (
   <Segment>
     <Header dividing size="large" content="Basics" />
