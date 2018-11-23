@@ -9,15 +9,25 @@ import AccountPage from "./AccountPage"
 import PhotosPage from "./PhotosPage"
 import SettingsNav from "./SettingsNav"
 
-import { updatePassword } from "../../auth/authActions"
+import { updatePassword, updateProfile } from "../../auth/authActions"
 
-const Settings = ({ providerId, updatePassword }) => (
+const Settings = ({ providerId, updatePassword, user }) => (
   <Grid>
     <Grid.Column width={12}>
       <Switch>
         <Redirect exact from="/settings" to="/settings/basic" />
-        <Route path="/settings/basic" component={BasicPage} />
-        <Route path="/settings/about" component={AboutPage} />
+        <Route
+          path="/settings/basic"
+          render={() => (
+            <BasicPage initialValues={user} updateProfile={updateProfile} />
+          )}
+        />
+        <Route
+          path="/settings/about"
+          render={() => (
+            <AboutPage initialVaues={user} updateProfile={updateProfile} />
+          )}
+        />
         <Route path="/settings/photos" component={PhotosPage} />
         <Route
           path="/settings/account"
@@ -37,10 +47,11 @@ const Settings = ({ providerId, updatePassword }) => (
 )
 
 const mapStateToProps = ({ firebase }) => ({
-  providerId: firebase.auth.providerData[0].providerId
+  providerId: firebase.auth.providerData[0].providerId,
+  user: firebase.profile
 })
 
 export default connect(
   mapStateToProps,
-  { updatePassword }
+  { updatePassword, updateProfile }
 )(Settings)
