@@ -97,7 +97,6 @@ class PhotosPage extends Component {
     if (photos) {
       filterredPhotos = photos.filter(photo => photo.url !== profile.photoURL)
     }
-    console.log(this.state)
     return (
       <Segment>
         <Header dividing size="large" content="Your Photos" />
