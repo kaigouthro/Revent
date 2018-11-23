@@ -7,15 +7,12 @@ import ReduxToastr from "react-redux-toastr"
 import App from "./app/layout/App"
 import ScrollToTop from "./app/common/utils/ScrollToTop"
 import { configureStore } from "./app/store/configureStore"
-import { loadEvents } from "./features/events/eventActions"
 import * as serviceWorker from "./serviceWorker"
 import "semantic-ui-css/semantic.min.css"
 import "react-redux-toastr/lib/css/react-redux-toastr.min.css"
 import "./index.css"
 
 const store = configureStore()
-store.dispatch(loadEvents())
-const rootElem = document.getElementById("root")
 
 const renderApp = () => {
   ReactDOM.render(
@@ -31,7 +28,7 @@ const renderApp = () => {
         </ScrollToTop>
       </BrowserRouter>
     </Provider>,
-    rootElem
+    document.getElementById("root")
   )
 }
 
@@ -41,5 +38,8 @@ if (module.hot) {
   })
 }
 
-renderApp()
+store.firebaseAuthIsReady.then(() => {
+  renderApp()
+})
+
 serviceWorker.unregister()

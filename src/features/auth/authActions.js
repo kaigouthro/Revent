@@ -86,7 +86,7 @@ export const updatePassword = credential => async (
   const user = firebase.auth().currentUser
 
   try {
-    await user.updatePassword(credential.newPassword)
+    await user.updatePassword(credential.newPassword1)
     await dispatch(reset("account"))
     toastr.success("Success", "Your password has been updated")
   } catch (err) {

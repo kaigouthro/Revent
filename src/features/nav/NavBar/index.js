@@ -19,7 +19,6 @@ class NavBar extends Component {
 
   handleSignOut = () => {
     this.props.firebase.logout()
-    this.props.history.push("/")
   }
 
   render() {
