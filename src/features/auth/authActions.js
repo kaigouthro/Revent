@@ -1,3 +1,4 @@
+import moment from "moment"
 import { SubmissionError, reset } from "redux-form"
 import { toastr } from "react-redux-toastr"
 import { closeModal } from "../modals/modalActions"
@@ -103,6 +104,13 @@ export const updateProfile = user => async (
 ) => {
   const firebase = getFirebase()
   try {
+    if (
+      user.dateOfBirth &&
+      getState().firebase.profile.dateOfBirth &&
+      user.dateOfBirth !== getState().firebase.profile.dateOfBirth
+    ) {
+      user.dateOfBirth = moment(user.dateOfBirth).toDate()
+    }
     await firebase.updateProfile(user)
     toastr.success("Success", "Profile updated!")
   } catch (err) {
