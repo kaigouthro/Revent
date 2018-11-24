@@ -53,7 +53,7 @@ const AboutPage = ({ updateProfile, handleSubmit, pristine, submitting }) => (
         component={SelectInput}
         options={interests}
         value="interests"
-        multipel={true}
+        multiple={true}
         placeholder="Select your interests"
       />
       <Field

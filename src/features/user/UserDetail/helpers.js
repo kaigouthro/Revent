@@ -3,7 +3,13 @@ import { Item, Icon, Image } from "semantic-ui-react"
 
 export default {
   getFirstName: fullName => fullName.split(" ")[0],
-  renderInterests: interests => console.log(interests),
+  renderInterests: interests =>
+    interests.map((interest, index) => (
+      <Item key={index}>
+        <Icon name="heart" />
+        <Item.Content>{interest}</Item.Content>
+      </Item>
+    )),
   query: ({ auth }) => [
     {
       collection: "users",

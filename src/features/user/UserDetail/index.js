@@ -30,9 +30,9 @@ class UserDetail extends Component {
         createdAt,
         about,
         interests
-      }
+      },
+      photos
     } = this.props
-    console.log(interests)
     return (
       <Grid>
         <Grid.Column width={16}>
@@ -55,7 +55,10 @@ class UserDetail extends Component {
           <Segment>
             <Grid columns={2}>
               <Grid.Column width={10}>
-                <Header icon="smile" content={displayName} />
+                <Header
+                  icon="smile"
+                  content={displayName && getFirstName(displayName)}
+                />
                 <p>
                   I am a: <strong>{occupation}</strong>
                 </p>
@@ -70,7 +73,7 @@ class UserDetail extends Component {
               </Grid.Column>
               <Grid.Column width={6}>
                 <Header icon="heart outline" content="Interests" />
-                <List>{renderInterests(interests)}</List>
+                <List>{interests && renderInterests(interests)}</List>
               </Grid.Column>
             </Grid>
           </Segment>
@@ -92,7 +95,7 @@ class UserDetail extends Component {
           <Segment attached>
             <Header icon="image" content="Photos" />
             <Image.Group size="small">
-              <p>Photos here</p>
+              {photos && renderPhotos(photos)}
             </Image.Group>
           </Segment>
         </Grid.Column>
@@ -106,6 +109,27 @@ class UserDetail extends Component {
               <Menu.Item name="Future Event" />
               <Menu.Item name="Events Hosted" />
             </Menu>
+
+            <Card.Group itemsPerRow={5}>
+              <Card>
+                <Image src={"/assets/categoryImages/drinks.jpg"} />
+                <Card.Content>
+                  <Card.Header textAlign="center">Event Title</Card.Header>
+                  <Card.Meta textAlign="center">
+                    28th March 2018 at 10:00 PM
+                  </Card.Meta>
+                </Card.Content>
+              </Card>
+              <Card>
+                <Image src={"/assets/categoryImages/drinks.jpg"} />
+                <Card.Content>
+                  <Card.Header textAlign="center">Event Title</Card.Header>
+                  <Card.Meta textAlign="center">
+                    28th March 2018 at 10:00 PM
+                  </Card.Meta>
+                </Card.Content>
+              </Card>
+            </Card.Group>
           </Segment>
         </Grid.Column>
       </Grid>

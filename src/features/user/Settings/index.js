@@ -11,7 +11,7 @@ import SettingsNav from "./SettingsNav"
 
 import { updatePassword, updateProfile } from "../../auth/authActions"
 
-const Settings = ({ providerId, updatePassword, user }) => (
+const Settings = ({ providerId, updatePassword, user, updateProfile }) => (
   <Grid>
     <Grid.Column width={12}>
       <Switch>
@@ -25,7 +25,7 @@ const Settings = ({ providerId, updatePassword, user }) => (
         <Route
           path="/settings/about"
           render={() => (
-            <AboutPage initialVaues={user} updateProfile={updateProfile} />
+            <AboutPage initialValues={user} updateProfile={updateProfile} />
           )}
         />
         <Route path="/settings/photos" component={PhotosPage} />
