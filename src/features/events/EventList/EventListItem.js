@@ -9,7 +9,7 @@ import { objToArray } from "../../../app/common/utils/helpers"
 const EventListItem = ({ event }) => {
   const renderAttendees = attendees =>
     attendees &&
-    objToArray(attendees).map(attendee => (
+    Object.values(attendees).map(attendee => (
       <EventListAttendee key={attendee.id} attendee={attendee} />
     ))
 

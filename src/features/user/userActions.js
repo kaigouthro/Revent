@@ -90,3 +90,19 @@ export const setMainPhoto = photo => async (
     throw new Error("Problem set the main photo")
   }
 }
+
+export const goingToEvent = event => async (
+  dispatch,
+  getState,
+  { getFirebase }
+) => {
+  console.log("goingToEvent", event)
+}
+
+export const cancellGoingEvent = event => async (
+  dispatch,
+  getState,
+  { getFirebase }
+) => {
+  console.log("cancellGoingEvent", event)
+}
