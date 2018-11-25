@@ -6,6 +6,7 @@ import { Form, Segment, Button, Label, Divider } from "semantic-ui-react"
 import { loginUser, socialLogin } from "../authActions"
 import TextInput from "../../../app/common/form/TextInput"
 import SocialLogin from "../SocialLogin"
+import renderError from "../../../app/common/utils/renderError"
 
 const LoginForm = ({ loginUser, socialLogin, handleSubmit, error }) => {
   return (
@@ -23,11 +24,7 @@ const LoginForm = ({ loginUser, socialLogin, handleSubmit, error }) => {
           type="password"
           placeholder="Password"
         />
-        {error && (
-          <Label basic color="red">
-            {error}
-          </Label>
-        )}
+        {renderError(error)}
         <Button fluid size="large" color="teal">
           Login
         </Button>

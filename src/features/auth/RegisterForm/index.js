@@ -5,6 +5,7 @@ import { reduxForm, Field } from "redux-form"
 import { Form, Segment, Button, Divider } from "semantic-ui-react"
 
 import { registerUser } from "../authActions"
+import renderError from "../../../app/common/utils/renderError"
 import TextInput from "../../../app/common/form/TextInput"
 import SocialLogin from "../SocialLogin"
 
@@ -41,6 +42,7 @@ const RegisterForm = ({
         type="password"
         placeholder="Password"
       />
+      {renderError(error)}
       <Button disabled={invalid || submitting} fluid size="large" color="teal">
         Register
       </Button>
