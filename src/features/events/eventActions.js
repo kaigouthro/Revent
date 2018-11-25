@@ -60,3 +60,22 @@ export const loadEvents = () => async dispatch => {
     dispatch(asyncActionError())
   }
 }
+
+export const cancelToggle = (cancelled, eventId) => async (
+  dispatch,
+  getState,
+  { getFirestore }
+) => {
+  const firestore = getFirestore()
+  const message = cancelled
+    ? "Are you sure you want to cancell the event?"
+    : "The event will be reactive - are you sure?"
+
+  try {
+    toastr.confirm(message, {
+      onOk: () => firestore.update(`events/${eventId}`, { cancelled })
+    })
+  } catch (error) {
+    console.error(error)
+  }
+}

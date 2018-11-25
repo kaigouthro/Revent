@@ -3,14 +3,12 @@ import React, { Component } from "react"
 import { reduxForm, Field } from "redux-form"
 import { connect } from "react-redux"
 import { Grid, Header, Segment, Form, Button } from "semantic-ui-react"
-import cuid from "cuid"
-import moment from "moment"
 import Script from "react-load-script"
 import { googleApiKey } from "../../../app/config/keys"
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete"
 
 import { category } from "../../../app/data/eventData"
-import { createEvent, updateEvent } from "../eventActions"
+import { createEvent } from "../eventActions"
 import { validate } from "../../../app/common/form/formValidate"
 import TextInput from "../../../app/common/form/TextInput"
 import TextArea from "../../../app/common/form/TextArea"
@@ -58,27 +56,14 @@ class EventForm extends Component {
   }
 
   onFormSubmit = values => {
-    const { initialValues, createEvent, updateEvent, history } = this.props
-    values.date = moment(values.date).format("YYYY-MM-DD")
+    const { createEvent } = this.props
     values.venueLatLng = this.state.venueLatLng
 
-    if (initialValues.id) {
-      updateEvent(values)
-      history.goBack()
-    } else {
-      const newEvent = {
-        id: cuid(),
-        ...values,
-        hostPhotoURL: "/assets/user.png",
-        hostedBy: "Bob Lee Swagger"
-      }
-      createEvent(newEvent)
-      history.push("/events")
-    }
+    createEvent(values)
   }
 
   render() {
-    const { invalid, submitting, pristine } = this.props
+    const { invalid, submitting, pristine, history } = this.props
     return (
       <Grid>
         <Script
@@ -114,7 +99,7 @@ class EventForm extends Component {
                 name="city"
                 type="text"
                 component={PlaceInput}
-                options={{ type: ["(cities)"] }}
+                options={{ type: ["(  )"] }}
                 placeholder="Event City"
                 onSelect={this.handleCitySelect}
               />
@@ -148,7 +133,7 @@ class EventForm extends Component {
               >
                 Submit
               </Button>
-              <Button type="button" onClick={this.props.history.goBack}>
+              <Button type="button" onClick={history.goBack}>
                 Cancel
               </Button>
             </Form>
@@ -159,23 +144,7 @@ class EventForm extends Component {
   }
 }
 
-const mapStateToProps = ({ events }, ownProps) => {
-  const eventId = ownProps.match.params.id
-  let event = {}
-
-  if (eventId && events.length) {
-    event = events.filter(event => event.id === eventId)[0]
-  }
-
-  // initialValues provides redux-form the initial data to populate with
-  return { initialValues: event }
-}
-
 export default connect(
-  mapStateToProps,
-  { createEvent, updateEvent }
-)(
-  reduxForm({ form: "eventForm", enableReinitialize: true, validate })(
-    EventForm
-  )
-)
+  null,
+  { createEvent }
+)(reduxForm({ form: "eventForm", validate })(EventForm))
