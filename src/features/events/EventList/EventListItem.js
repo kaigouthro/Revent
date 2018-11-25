@@ -9,7 +9,7 @@ import { objToArray } from "../../../app/common/utils/helpers"
 const EventListItem = ({ event }) => {
   const renderAttendees = attendees =>
     attendees &&
-    Object.values(attendees).map(attendee => (
+    objToArray(attendees).map(attendee => (
       <EventListAttendee key={attendee.id} attendee={attendee} />
     ))
 
@@ -20,12 +20,12 @@ const EventListItem = ({ event }) => {
           <Item>
             <Item.Image size="tiny" circular src={event.hostPhotoURL} />
             <Item.Content>
-              <Item.Header as={Link} to={`/event/${event.id}`}>
+              <Item.Header as={Link} to={`/events/${event.id}`}>
                 {event.title}
               </Item.Header>
               <Item.Description>
                 Hosted by{" "}
-                <Link to={`/profile/${event.hostedBy}`}>{event.hostedBy}</Link>
+                <Link to={`/profile/${event.hostUid}`}>{event.hostedBy}</Link>
               </Item.Description>
               {event.cancelled && (
                 <Label

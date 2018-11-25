@@ -15,6 +15,7 @@ import {
   isRequired,
   matchesField
 } from "revalidate"
+import { renderFacebook, renderGoogle } from "./helpers"
 
 const validate = combineValidators({
   newPassword1: isRequired({ message: "Please enter a password" }),
@@ -74,6 +75,8 @@ const AccountPage = ({
         </Form>
       </div>
     )}
+    {renderFacebook(providerId)}
+    {renderGoogle(providerId)}
   </Segment>
 )
 
