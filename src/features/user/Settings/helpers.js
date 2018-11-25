@@ -1,6 +1,7 @@
-import { Button, Icon } from "semantic-ui-react"
+import React from "react"
+import { Header, Button, Icon } from "semantic-ui-react"
 
-export const renderFacebook = () =>
+export const renderFacebook = providerId =>
   providerId &&
   providerId === "facebook.com" && (
     <div>
