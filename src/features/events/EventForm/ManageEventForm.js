@@ -2,7 +2,8 @@
 import React, { Component } from "react"
 import { reduxForm, Field } from "redux-form"
 import { connect } from "react-redux"
-import { withFirestore } from "react-redux-firebase"
+import { compose } from "redux"
+import { firestoreConnect } from "react-redux-firebase"
 import { Grid, Header, Segment, Form, Button } from "semantic-ui-react"
 import moment from "moment"
 import Script from "react-load-script"
@@ -23,16 +24,6 @@ class EventForm extends Component {
     cityLatLng: {},
     venueLatLng: {},
     scriptLoaded: false
-  }
-
-  async componentDidMount() {
-    const { firestore, match } = this.props
-    await firestore.setListener(`events/${match.params.id}`)
-  }
-
-  async componentWillUnmount() {
-    const { firestore, match } = this.props
-    await firestore.unsetListener(`events/${match.params.id}`)
   }
 
   handleScriptLoad = () => {
@@ -79,7 +70,7 @@ class EventForm extends Component {
     values.venueLatLng = this.state.venueLatLng
 
     if (initialValues.id) {
-      if (Object(values.venueLatLng).length === 0) {
+      if (Object.keys(values.venueLatLng).length === 0) {
         values.venueLatLng = event.venueLatLng
       }
       updateEvent(values)
@@ -183,12 +174,12 @@ class EventForm extends Component {
   }
 }
 
-const mapStateToProps = ({ firestore: { ordered } }) => {
+const mapStateToProps = ({ firestore: { ordered } }, ownProps) => {
   let event = {}
-  if (ordered.events) {
-    event = ordered.events[0]
+  if (ordered.events && ownProps.match.params) {
+    const id = ownProps.match.params.id
+    event = ordered.events.find(event => event.id === id)
   }
-
   // initialValues provides redux-form the initial data to populate with
   return {
     initialValues: event,
@@ -196,13 +187,11 @@ const mapStateToProps = ({ firestore: { ordered } }) => {
   }
 }
 
-export default withFirestore(
+export default compose(
   connect(
     mapStateToProps,
     { createEvent, updateEvent, cancelToggle }
-  )(
-    reduxForm({ form: "eventForm", enableReinitialize: true, validate })(
-      EventForm
-    )
-  )
-)
+  ),
+  firestoreConnect([{ collection: "events" }]),
+  reduxForm({ form: "eventForm", enableReinitialize: true, validate })
+)(EventForm)
