@@ -22,4 +22,8 @@ export const createNewEvent = (user, photoURL, event) => {
 }
 
 export const objToArray = obj =>
-  obj && Object.entries(obj).map(e => Object.assign(e[1], { id: e[0] }))
+  obj &&
+  Object.entries(obj).map(e => ({
+    ...e[1],
+    id: e[0]
+  }))

@@ -1,4 +1,5 @@
 import cuid from "cuid"
+import { toastr } from "react-redux-toastr"
 
 import {
   asyncActionStart,
@@ -94,15 +95,57 @@ export const setMainPhoto = photo => async (
 export const goingToEvent = event => async (
   dispatch,
   getState,
-  { getFirebase }
+  { getFirebase, getFirestore }
 ) => {
-  console.log("goingToEvent", event)
+  const firebase = getFirebase()
+  const firestore = getFirestore()
+  const user = firebase.auth().currentUser
+  const photoURL = getState().firebase.profile.photoURL
+  const attendee = {
+    displayName: user.displayName,
+    going: true,
+    host: false,
+    joinDate: Date.now(),
+    photoURL: photoURL || "/assets/user.png"
+  }
+
+  try {
+    await firestore.update(`events/${event.id}`, {
+      [`attendees.${user.uid}`]: attendee
+    })
+    await firestore.set(`event_attendees/${event.id}_${user.uid}`, {
+      eventId: event.id,
+      userUid: user.uid,
+      eventDate: event.date,
+      host: false
+    })
+    toastr.success("Success", "You have signed up for the event")
+  } catch (error) {
+    console.log(error)
+    toastr.error("Oops!", "Problem signing up to the even")
+  }
 }
 
 export const cancellGoingEvent = event => async (
   dispatch,
   getState,
-  { getFirebase }
+  { getFirebase, getFirestore }
 ) => {
-  console.log("cancellGoingEvent", event)
+  const firebase = getFirebase()
+  const firestore = getFirestore()
+  const user = firebase.auth().currentUser
+
+  try {
+    await firestore.update(`events/${event.id}`, {
+      [`attendees.${user.uid}`]: firestore.FieldValue.delete()
+    })
+    await firestore.delete(`event_attendees/${event.id}_${user.uid}`)
+    toastr.success(
+      "Success",
+      "You're successfully removed yourself from the event"
+    )
+  } catch (error) {
+    console.log(error)
+    toastr.error("Oops!", "Something went wrong")
+  }
 }

@@ -29,11 +29,10 @@ const App = () => (
           <Container className="main">
             <Switch>
               <Redirect exact from="/" to="/events" />
-              <Route exact path="/events" component={EventDashboard} />
+              <Route path="/events" component={EventDashboard} />
               <Route path="/event/:id" component={EventDetail} />
               <Route path="/manage/:id" component={EventForm} />
               <Route path="/createEvent" component={CreateEventForm} />
-              <Route path="/events/:id" component={EventForm} />
               <Route path="/people" component={PeopleDashboard} />
               <Route path="/settings" component={Settings} />
               <Route path="/profile/:id" component={UserDetail} />
