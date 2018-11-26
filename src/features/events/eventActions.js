@@ -1,4 +1,5 @@
-import { UPDATE_EVENT, DELETE_EVENT, FETCH_EVENTS } from "./eventContants"
+import { DELETE_EVENT, FETCH_EVENTS } from "./eventContants"
+import moment from "moment"
 import {
   asyncActionStart,
   asyncActionFinish,
@@ -40,12 +41,21 @@ export const createEvent = event => async (
   }
 }
 
-export const updateEvent = event => async dispatch => {
+export const updateEvent = event => async (
+  dispatch,
+  getState,
+  { getFirebase, getFirestore }
+) => {
+  const firestore = getFirestore()
+  // check new event date difference last event date from the state firestore, if diff update
+  const lastEvent = getState().firestore.ordered.events.find(
+    e => e.id === event.id
+  )
+  if (event.date !== lastEvent.date) {
+    event.date = moment(event.date).toDate()
+  }
   try {
-    dispatch({
-      type: UPDATE_EVENT,
-      payload: { event }
-    })
+    await firestore.update(`events/${event.id}`, event)
     toastr.success("Success!", "Event successfully updated")
   } catch (err) {
     console.log(err)
