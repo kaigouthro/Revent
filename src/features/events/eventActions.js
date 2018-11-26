@@ -63,10 +63,57 @@ export const updateEvent = event => async (
   }
 }
 
-export const deleteEvent = eventId => ({
-  type: DELETE_EVENT,
-  payload: { eventId }
-})
+export const getEventsForDashboard = lastEvent => async (
+  dispatch,
+  getState,
+  { getFirebase, getFirestore }
+) => {
+  let today = new Date(Date.now())
+  const firestore = getFirestore()
+  const eventsRefs = firestore.collection("events")
+
+  try {
+    dispatch(asyncActionStart())
+    let startAfter =
+      lastEvent &&
+      (await firestore
+        .collection("events")
+        .doc(lastEvent.id)
+        .get())
+    let query = lastEvent
+      ? eventsRefs
+          .where("date", ">=", today)
+          .orderBy("date")
+          .startAfter(startAfter)
+          .limit(2)
+      : eventsRefs
+          .where("date", ">=", today)
+          .orderBy("date")
+          .limit(2)
+    let querySnapshot = await query.get()
+    if (querySnapshot.docs.length === 0) {
+      dispatch(asyncActionFinish())
+      return querySnapshot
+    }
+
+    let events = []
+
+    for (let doc in querySnapshot.docs) {
+      let event = {
+        ...querySnapshot.docs[doc].data(),
+        id: querySnapshot.docs[doc].id
+      }
+      events.push(event)
+    }
+
+    dispatch({ type: FETCH_EVENTS, payload: { events } })
+    dispatch(asyncActionFinish())
+    return querySnapshot
+  } catch (error) {
+    console.log(error)
+    dispatch(asyncActionError())
+  }
+}
 
 export const loadEvents = () => async dispatch => {
   try {
