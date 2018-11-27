@@ -1,15 +1,7 @@
 import React from "react"
-import { Item, Icon, Image } from "semantic-ui-react"
+import { Image } from "semantic-ui-react"
 
 export const getFirstName = fullName => fullName && fullName.split(" ")[0]
-
-export const renderInterests = interests =>
-  interests.map((interest, index) => (
-    <Item key={index}>
-      <Icon name="heart" />
-      <Item.Content>{interest}</Item.Content>
-    </Item>
-  ))
 
 export const renderPhotos = photos =>
   photos && photos.map(photo => <Image key={photo.id} src={photo.url} />)

@@ -2,36 +2,48 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import { compose } from "redux"
 import { firestoreConnect, isEmpty } from "react-redux-firebase"
-import { Link } from "react-router-dom"
 import LoadingSpinner from "../../../app/layout/LoadingSpinner"
-import format from "date-fns/format"
-import {
-  Button,
-  Grid,
-  Header,
-  Image,
-  Item,
-  List,
-  Segment
-} from "semantic-ui-react"
+import { Grid } from "semantic-ui-react"
 
-import {
-  userDetailQuery,
-  getFirstName,
-  renderInterests,
-  renderPhotos
-} from "./helpers"
 import UserDetailEvents from "./UserDetailEvents"
+import UserDetailHeader from "./UserDetailHeader"
+import UserDetailDescription from "./UserDetailDescription"
+import UserDetailSidebar from "./UserDetailSidebar"
+import UserDetailPhotos from "./UserDetailPhotos"
+
 import { getUserEvents } from "../userActions"
+import { userDetailQuery } from "./helpers"
 
 class UserDetail extends Component {
   async componentDidMount() {
-    const { getUserEvents, userUid } = this.props
-    await getUserEvents(userUid)
+    const { getUserEvents, auth, match } = this.props
+    if (auth.uid === match.params.id) {
+      await getUserEvents(auth.uid)
+    } else {
+      await getUserEvents(match.params.id)
+    }
+  }
+
+  changeTab = async (e, { activeIndex }) => {
+    const { getUserEvents, auth, match } = this.props
+    if (auth.uid === match.params.id) {
+      await getUserEvents(auth.uid, activeIndex)
+    } else {
+      await getUserEvents(match.params.id, activeIndex)
+    }
   }
 
   render() {
-    const { profile, photos, requesting } = this.props
+    const {
+      auth,
+      profile,
+      photos,
+      requesting,
+      match,
+      events,
+      eventsLoading
+    } = this.props
+    const isCurrentUser = auth.uid === match.params.id
     const isLoading = Object.values(requesting).some(a => a === true)
 
     if (isLoading) return <LoadingSpinner inverted={true} />
@@ -39,75 +51,24 @@ class UserDetail extends Component {
     return (
       <Grid>
         <Grid.Column width={16}>
-          <Segment>
-            <Item.Group>
-              <Item>
-                <Item.Image size="small" avatar src={profile.photoURL} />
-                <Item.Content>
-                  <Header as="h1">{profile.displayName}</Header>
-                  <br />
-                  <Header as="h3">{profile.occupation}</Header>
-                  <br />
-                  <Header as="h3">{profile.origin}</Header>
-                </Item.Content>
-              </Item>
-            </Item.Group>
-          </Segment>
+          <UserDetailHeader profile={profile} />
         </Grid.Column>
         <Grid.Column width={12}>
-          <Segment>
-            <Grid columns={2}>
-              <Grid.Column width={10}>
-                <Header
-                  icon="smile"
-                  content={
-                    profile.displayName && getFirstName(profile.displayName)
-                  }
-                />
-                <p>
-                  I am a: <strong>{profile.occupation}</strong>
-                </p>
-                <p>
-                  Originally from <strong>{profile.origin}</strong>
-                </p>
-                <p>
-                  Member since:{" "}
-                  <strong>{format(profile.createdAt, "dddd Do MMMM")}</strong>
-                </p>
-                <p>{profile.about}</p>
-              </Grid.Column>
-              <Grid.Column width={6}>
-                <Header icon="heart outline" content="Interests" />
-                <List>
-                  {profile.interests && renderInterests(profile.interests)}
-                </List>
-              </Grid.Column>
-            </Grid>
-          </Segment>
+          <UserDetailDescription profile={profile} />
         </Grid.Column>
         <Grid.Column width={4}>
-          <Segment>
-            <Button
-              as={Link}
-              to={`/settings/basic`}
-              color="teal"
-              fluid
-              basic
-              content="Edit Profile"
-            />
-          </Segment>
+          <UserDetailSidebar isCurrentUser={isCurrentUser} profile={profile} />
         </Grid.Column>
-
         <Grid.Column width={12}>
-          <Segment attached>
-            <Header icon="image" content="Photos" />
-            <Image.Group size="small">
-              {photos && renderPhotos(photos)}
-            </Image.Group>
-          </Segment>
+          <UserDetailPhotos photos={photos} />
         </Grid.Column>
-
-        <UserDetailEvents />
+        <Grid.Column width={12}>
+          <UserDetailEvents
+            events={events}
+            eventsLoading={eventsLoading}
+            changeTab={this.changeTab}
+          />
+        </Grid.Column>
       </Grid>
     )
   }
@@ -127,9 +88,9 @@ const mapStateToProps = ({ firebase, firestore, events, async }, { match }) => {
 
   return {
     profile,
-    auth: firebase.auth,
     userUid,
     events,
+    auth: firebase.auth,
     eventsLoading: async.loading,
     photos: firestore.ordered.photos,
     requesting: firestore.status.requesting
