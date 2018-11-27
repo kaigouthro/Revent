@@ -17,6 +17,8 @@ import {
 } from "semantic-ui-react"
 
 import helperFunctions from "./helpers"
+import UserDetailEvents from "./UserDetailEvents"
+
 const { getFirstName, renderInterests, query, renderPhotos } = helperFunctions
 
 class UserDetail extends Component {
@@ -100,38 +102,7 @@ class UserDetail extends Component {
           </Segment>
         </Grid.Column>
 
-        <Grid.Column width={12}>
-          <Segment attached>
-            <Header icon="calendar" content="Events" />
-            <Menu secondary pointing>
-              <Menu.Item name="All Event" active />
-              <Menu.Item name="Past Event" />
-              <Menu.Item name="Future Event" />
-              <Menu.Item name="Events Hosted" />
-            </Menu>
-
-            <Card.Group itemsPerRow={5}>
-              <Card>
-                <Image src={"/assets/categoryImages/drinks.jpg"} />
-                <Card.Content>
-                  <Card.Header textAlign="center">Event Title</Card.Header>
-                  <Card.Meta textAlign="center">
-                    28th March 2018 at 10:00 PM
-                  </Card.Meta>
-                </Card.Content>
-              </Card>
-              <Card>
-                <Image src={"/assets/categoryImages/drinks.jpg"} />
-                <Card.Content>
-                  <Card.Header textAlign="center">Event Title</Card.Header>
-                  <Card.Meta textAlign="center">
-                    28th March 2018 at 10:00 PM
-                  </Card.Meta>
-                </Card.Content>
-              </Card>
-            </Card.Group>
-          </Segment>
-        </Grid.Column>
+        <UserDetailEvents />
       </Grid>
     )
   }
