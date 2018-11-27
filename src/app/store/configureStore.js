@@ -11,7 +11,8 @@ const rrfConfig = {
   userProfile: "users",
   attachAuthIsReady: true,
   useFirestoreForProfile: true,
-  updateProfileOnLogin: false
+  updateProfileOnLogin: false,
+  enableLogging: true
 }
 
 export const configureStore = preloadedState => {
@@ -23,8 +24,8 @@ export const configureStore = preloadedState => {
 
   const composedEnhancer = composeWithDevTools(
     ...storeEnhancers,
-    reactReduxFirebase(firebase, rrfConfig),
-    reduxFirestore(firebase)
+    reduxFirestore(firebase),
+    reactReduxFirebase(firebase, rrfConfig)
   )
 
   const store = createStore(rootReducer, preloadedState, composedEnhancer)

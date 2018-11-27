@@ -194,7 +194,7 @@ export const getUserEvents = (userUid, activeTab) => async (
     let events = []
 
     for (let doc in querySnapshot.docs) {
-      let event = firestore
+      let event = await firestore
         .collection("events")
         .doc(querySnapshot.docs[doc].data().eventId)
         .get()

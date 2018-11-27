@@ -1,15 +1,7 @@
 import React from "react"
 import format from "date-fns/format"
 import { Link } from "react-router-dom"
-import {
-  Grid,
-  Segment,
-  Header,
-  Menu,
-  Card,
-  Image,
-  Tab
-} from "semantic-ui-react"
+import { Grid, Segment, Header, Card, Image, Tab } from "semantic-ui-react"
 
 const panes = [
   { menuItem: "All Events", pane: { key: "allEvents" } },
