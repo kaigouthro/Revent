@@ -1,4 +1,4 @@
-import { DELETE_EVENT, FETCH_EVENTS } from "./eventContants"
+import { FETCH_EVENTS } from "./eventContants"
 import moment from "moment"
 import {
   asyncActionStart,

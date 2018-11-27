@@ -41,7 +41,7 @@ class EventDashboard extends Component {
   }
 
   render() {
-    const { events, loading } = this.props
+    const { loading } = this.props
     const { initialLoading, moreEvents, loadedEvents } = this.state
 
     if (initialLoading) return <LoadingSpinner inverted={true} />

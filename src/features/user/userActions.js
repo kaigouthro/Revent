@@ -1,6 +1,8 @@
 import cuid from "cuid"
 import { toastr } from "react-redux-toastr"
 
+import { FETCH_EVENTS } from "../events/eventContants"
+
 import {
   asyncActionStart,
   asyncActionFinish,
@@ -147,5 +149,63 @@ export const cancellGoingEvent = event => async (
   } catch (error) {
     console.log(error)
     toastr.error("Oops!", "Something went wrong")
+  }
+}
+
+export const getUserEvents = (userUid, activeTab) => async (
+  dispatch,
+  getState,
+  { getFirestore }
+) => {
+  dispatch(asyncActionStart())
+  const firestore = getFirestore()
+  const today = new Date(Date.now())
+  let eventsRef = firestore.collection("event_attendees")
+  let query
+
+  switch (activeTab) {
+    case 1: // past events
+      query = eventsRef
+        .where("userUid", "==", userUid)
+        .where("eventDate", "<=", today)
+        .orderBy("eventDate", "desc")
+      break
+    case 2: // future events
+      query = eventsRef
+        .where("userUid", "==", userUid)
+        .where("eventDate", ">=", today)
+        .orderBy("eventDate")
+      break
+    case 3: // hosted events
+      query = eventsRef
+        .where("userUid", "==", userUid)
+        .where("host", "==", true)
+        .orderBy("eventDate", "desc")
+      break
+    default:
+      query = eventsRef
+        .where("userUid", "==", userUid)
+        .orderBy("eventDate", "desc")
+      break
+  }
+
+  try {
+    let querySnapshot = await query.get()
+    let events = []
+
+    for (let doc in querySnapshot.docs) {
+      let event = firestore
+        .collection("events")
+        .doc(querySnapshot.docs[doc].data().eventId)
+        .get()
+
+      events.push({ ...event.data(), id: event.id })
+    }
+
+    dispatch({ type: FETCH_EVENTS, payload: { events } })
+    dispatch(asyncActionFinish())
+  } catch (error) {
+    console.log(error)
+    dispatch(asyncActionError())
   }
 }
