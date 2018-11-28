@@ -145,3 +145,29 @@ export const cancelToggle = (cancelled, eventId) => async (
     console.error(error)
   }
 }
+
+export const addEventComment = (eventId, values, parentId) => async (
+  dispatch,
+  getState,
+  { getFirebase }
+) => {
+  const firebase = getFirebase()
+  const profile = getState().firebase.profile
+  const user = getState().firebase.auth
+
+  let newComment = {
+    parentId,
+    displayName: profile.displayName,
+    photoURL: process.photoURL,
+    uid: user.uid,
+    text: values.comment,
+    date: Date.now()
+  }
+
+  try {
+    await firebase.push(`event_chat/${eventId}`, newComment)
+  } catch (error) {
+    console.log(error)
+    toastr.error("Oops!", "Problem adding comment")
+  }
+}
