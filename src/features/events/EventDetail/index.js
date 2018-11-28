@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { compose } from "redux"
-import { firestoreConnect } from "react-redux-firebase"
+import { firestoreConnect, withFirestore } from "react-redux-firebase"
 import { Grid } from "semantic-ui-react"
 
 import EventDetailHeader from "./EventDetailHeader"
@@ -12,6 +12,19 @@ import { objToArray } from "../../../app/common/utils/helpers"
 import { goingToEvent, cancellGoingEvent } from "../../user/userActions"
 
 class EventDetail extends Component {
+  async componentDidMount() {
+    const { firestore, match } = this.props
+    await firestore.setListener({ collection: "events", doc: match.params.id })
+  }
+
+  async componentWillUnmount() {
+    const { firestore, match } = this.props
+    await firestore.unsetListener({
+      collection: "events",
+      doc: match.params.id
+    })
+  }
+
   render() {
     const { event, auth, goingToEvent, cancellGoingEvent } = this.props
     const attendees = event && event.attendees && objToArray(event.attendees)
@@ -45,8 +58,7 @@ const mapStateToProps = (
 ) => {
   let event = {}
   if (ordered.events && ownProps.match.params) {
-    const id = ownProps.match.params.id
-    event = ordered.events.find(event => event.id === id)
+    event = ordered.events[0]
   }
   return {
     event,
@@ -55,9 +67,9 @@ const mapStateToProps = (
 }
 
 export default compose(
+  withFirestore,
   connect(
     mapStateToProps,
     { goingToEvent, cancellGoingEvent }
-  ),
-  firestoreConnect([{ collection: "events" }])
+  )
 )(EventDetail)
