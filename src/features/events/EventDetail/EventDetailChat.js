@@ -1,6 +1,8 @@
 import React, { Component } from "react"
-import { Segment, Header, Comment, Form, Button } from "semantic-ui-react"
+import { Link } from "react-router-dom"
+import { Segment, Header, Comment } from "semantic-ui-react"
 import distanceInWords from "date-fns/distance_in_words"
+import EventDetailChatForm from "./EventDetailChatForm"
 
 class EventDetailChat extends Component {
   state = { showReplyForm: false, selectedCommentId: null }
@@ -21,7 +23,7 @@ class EventDetailChat extends Component {
     eventId
   ) => (
     <Comment.Content>
-      <Comment.Author as="Link" to={`/profile/${comment.uid}`}>
+      <Comment.Author as={Link} to={`/profile/${comment.uid}`}>
         {comment.displayName}
       </Comment.Author>
       <Comment.Metadata>
@@ -96,12 +98,5 @@ class EventDetailChat extends Component {
     )
   }
 }
-
-const EventDetailChatForm = ({ parentId, addEventComment, eventId, form }) => (
-  <Form reply>
-    <Form.TextArea />
-    <Button content="Add Reply" labelPosition="left" icon="edit" primary />
-  </Form>
-)
 
 export default EventDetailChat
