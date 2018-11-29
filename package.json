@@ -39,12 +39,16 @@
   },
   "devDependencies": {
     "eslint-plugin-prettier": "^2.6.0",
+    "eslint-plugin-promise": "^4.0.1",
     "prettier": "^1.12.1",
     "redux-devtools-extension": "^2.13.2"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
+  "eslintIgnore": [
+    "node_modules"
+  ],
   "browserslist": [
     ">0.2%",
     "not dead",
