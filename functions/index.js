@@ -28,11 +28,8 @@ exports.createActivity = functions.firestore
   .document("events/{eventId}")
   .onCreate(event => {
     let newEvent = event.data()
-    console.log({ event })
-    console.log({ newEvent })
 
     const activity = newActivity("newEvent", newEvent, event.id)
-    console.log({ activity })
 
     return addActivityToCollection(activity)
   })
@@ -42,10 +39,6 @@ exports.cancelActivivity = functions.firestore
   .onUpdate((event, context) => {
     let updatedEvent = event.after.data()
     let previousEvent = event.before.data()
-    console.log({ event })
-    console.log({ context })
-    console.log({ updatedEvent })
-    console.log({ previousEvent })
 
     if (
       !updatedEvent.cancelled ||
@@ -58,7 +51,6 @@ exports.cancelActivivity = functions.firestore
       updatedEvent,
       context.params.eventId
     )
-    console.log({ activity })
 
     return addActivityToCollection(activity)
   })
