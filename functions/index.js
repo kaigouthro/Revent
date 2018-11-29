@@ -6,6 +6,7 @@ const newActivity = (type, event, id) => {
   const { date, hostedBy, title, hostPhotoURL, hostUid } = event
   return {
     type,
+    title,
     evenDate: date,
     hostedBy,
     photoURL: hostPhotoURL,
