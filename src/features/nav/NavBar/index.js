@@ -33,27 +33,26 @@ class NavBar extends Component {
             Revents
           </Menu.Item>
           <Menu.Item as={NavLink} to="/events" name="Events" />
-          {authenticated && (
-            <Menu.Item as={NavLink} to="/people" name="People" />
-          )}
-          {authenticated && (
-            <Menu.Item>
-              <Button
-                as={Link}
-                to="/createEvent"
-                floated="right"
-                positive
-                inverted
-                content="Create Event"
-              />
-            </Menu.Item>
-          )}
           {authenticated ? (
-            <LoggedInMenu
-              signOut={this.handleSignOut}
-              profile={profile}
-              auth={auth}
-            />
+            [
+              <Menu.Item key={1} as={NavLink} to="/people" name="People" />,
+              <Menu.Item key={2}>
+                <Button
+                  as={Link}
+                  to="/createEvent"
+                  floated="right"
+                  positive
+                  inverted
+                  content="Create Event"
+                />
+              </Menu.Item>,
+              <LoggedInMenu
+                key={3}
+                signOut={this.handleSignOut}
+                profile={profile}
+                auth={auth}
+              />
+            ]
           ) : (
             <SignedOutMenu
               signIn={this.handleSignIn}

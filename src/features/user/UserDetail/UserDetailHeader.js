@@ -2,23 +2,25 @@ import React from "react"
 import { Segment, Header, Item } from "semantic-ui-react"
 import differenceInYears from "date-fns/difference_in_years"
 
-const UserDetailHeader = ({
-  profile: { photoURL, displayName, occupation, city, dateOfBirth }
-}) => (
+const UserDetailHeader = ({ profile }) => (
   <Segment>
     <Item.Group>
       <Item>
-        <Item.Image size="small" avatar src={photoURL || "/assets/user.png"} />
+        <Item.Image
+          size="small"
+          avatar
+          src={profile.photoURL || "/assets/user.png"}
+        />
         <Item.Content>
-          <Header as="h1">{displayName}</Header>
+          <Header as="h1">{profile.displayName}</Header>
           <br />
-          <Header as="h3">{occupation}</Header>
+          <Header as="h3">{profile.occupation}</Header>
           <br />
           <Header as="h3">
-            {dateOfBirth
-              ? differenceInYears(Date.now(), dateOfBirth)
+            {profile.dateOfBirth
+              ? differenceInYears(Date.now(), profile.dateOfBirth)
               : "Unknown age"}
-            , {city || "Lives in unknown city"}
+            , {profile.city || "Lives in unknown city"}
           </Header>
         </Item.Content>
       </Item>
