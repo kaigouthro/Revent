@@ -8,11 +8,20 @@ import EventActivity from "../EventActivity"
 import LoadingSpinner from "../../../app/layout/LoadingSpinner"
 import { getEventsForDashboard } from "../eventActions"
 
+const query = [
+  {
+    collection: "activity",
+    orderBy: ["timestamp", "desc"],
+    limit: 5
+  }
+]
+
 class EventDashboard extends Component {
   state = {
     moreEvents: false,
     initialLoading: true,
-    loadedEvents: []
+    loadedEvents: [],
+    contextRef: {}
   }
 
   async componentDidMount() {
@@ -40,8 +49,10 @@ class EventDashboard extends Component {
     }
   }
 
+  handleContextRef = contextRef => this.setState({ contextRef })
+
   render() {
-    const { loading } = this.props
+    const { loading, activities } = this.props
     const { initialLoading, moreEvents, loadedEvents } = this.state
 
     if (initialLoading) return <LoadingSpinner inverted={true} />
@@ -49,15 +60,20 @@ class EventDashboard extends Component {
     return (
       <Grid>
         <Grid.Column width={10}>
-          <EventList
-            loading={loading}
-            events={loadedEvents}
-            moreEvents={moreEvents}
-            getNextEvents={this.getNextEvents}
-          />
+          <div ref={this.handleContextRef}>
+            <EventList
+              loading={loading}
+              events={loadedEvents}
+              moreEvents={moreEvents}
+              getNextEvents={this.getNextEvents}
+            />
+          </div>
         </Grid.Column>
         <Grid.Column width={6}>
-          <EventActivity />
+          <EventActivity
+            activities={activities}
+            contextRef={this.state.contextRef}
+          />
         </Grid.Column>
         <Grid.Column width={10}>
           <Loader active={loading} />
@@ -69,10 +85,11 @@ class EventDashboard extends Component {
 
 const mapStateToProps = state => ({
   events: state.events,
-  loading: state.async.loading
+  loading: state.async.loading,
+  activities: state.firestore.ordered.activity
 })
 
 export default connect(
   mapStateToProps,
   { getEventsForDashboard }
-)(firestoreConnect([{ collection: "events" }])(EventDashboard))
+)(firestoreConnect(query)(EventDashboard))
