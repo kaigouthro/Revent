@@ -186,7 +186,6 @@ export const getUserEvents = (userUid, activeTab) => async (
       query = eventsRef
         .where("userUid", "==", userUid)
         .orderBy("eventDate", "desc")
-      console.log(query)
       break
   }
 
@@ -211,6 +210,55 @@ export const getUserEvents = (userUid, activeTab) => async (
   }
 }
 
-export const followUser = profile => {}
+export const followUser = userToFollow => async (
+  dispatch,
+  getState,
+  { getFirebase, getFirestore }
+) => {
+  const firebase = getFirebase()
+  const firestore = getFirestore()
+  const user = firebase.auth().currentUser
 
-export const unfollowUser = profile => {}
+  // get the detail of the person user wants to follow
+  const { id, displayName, city, photoURL } = userToFollow
+  let following = {
+    displayName,
+    city: city || "Unknown city",
+    photoURL: photoURL || "/assets/user.png"
+  }
+  // add that person to the user's "following" collection
+  try {
+    await firestore.set(
+      {
+        collection: "users",
+        doc: user.uid,
+        subcollections: [{ collection: "following", doc: id }]
+      },
+      following
+    )
+  } catch (error) {
+    console.log(error)
+    // throw new Error("Problem following this person")
+  }
+}
+
+export const unfollowUser = userToUnfollow => async (
+  dispatch,
+  getState,
+  { getFirebase, getFirestore }
+) => {
+  const firebase = getFirebase()
+  const firestore = getFirestore()
+  const user = firebase.auth().currentUser
+
+  try {
+    await firestore.delete({
+      collection: "users",
+      doc: user.uid,
+      subcollections: [{ collection: "following", doc: userToUnfollow.id }]
+    })
+  } catch (error) {
+    console.log(error)
+    // throw new Error("Problem unfollowing this person")
+  }
+}
