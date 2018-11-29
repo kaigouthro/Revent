@@ -11,8 +11,8 @@ import UserDetailDescription from "./UserDetailDescription"
 import UserDetailSidebar from "./UserDetailSidebar"
 import UserDetailPhotos from "./UserDetailPhotos"
 
-import { getUserEvents } from "../userActions"
-import { userDetailQuery } from "./helpers"
+import { getUserEvents, followUser, unfollowUser } from "../userActions"
+import { userDetailQuery } from "../userDetailQuery"
 
 class UserDetail extends Component {
   async componentDidMount() {
@@ -41,10 +41,14 @@ class UserDetail extends Component {
       requesting,
       match,
       events,
+      following,
+      followUser,
+      unfollowUser,
       eventsLoading
     } = this.props
     const isCurrentUser = auth.uid === match.params.id
     const isLoading = Object.values(requesting).some(a => a === true)
+    const isFollowing = !isEmpty(following)
 
     if (isLoading) return <LoadingSpinner inverted={true} />
 
@@ -52,7 +56,13 @@ class UserDetail extends Component {
       <Grid>
         <UserDetailHeader profile={profile} />
         <UserDetailDescription profile={profile} />
-        <UserDetailSidebar isCurrentUser={isCurrentUser} profile={profile} />
+        <UserDetailSidebar
+          isCurrentUser={isCurrentUser}
+          profile={profile}
+          isFollowing={isFollowing}
+          followUser={followUser}
+          unfollowUser={unfollowUser}
+        />
         <UserDetailPhotos photos={photos} />
         <UserDetailEvents
           events={events}
@@ -83,6 +93,7 @@ const mapStateToProps = ({ firebase, firestore, events, async }, { match }) => {
     auth: firebase.auth,
     eventsLoading: async.loading,
     photos: firestore.ordered.photos,
+    following: firestore.ordered.following,
     requesting: firestore.status.requesting
   }
 }
@@ -90,7 +101,7 @@ const mapStateToProps = ({ firebase, firestore, events, async }, { match }) => {
 export default compose(
   connect(
     mapStateToProps,
-    { getUserEvents }
+    { getUserEvents, followUser, unfollowUser }
   ),
-  firestoreConnect((auth, userUid) => userDetailQuery(auth, userUid))
+  firestoreConnect(props => userDetailQuery(props))
 )(UserDetail)

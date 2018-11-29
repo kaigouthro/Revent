@@ -9,13 +9,13 @@ export const userDetailQuery = ({ auth, userUid, match }) =>
         {
           collection: "users",
           doc: userUid,
-          subCollections: [{ collection: "photos" }],
+          subcollections: [{ collection: "photos" }],
           storeAs: "photos"
         },
         {
           collection: "users",
           doc: auth.uid,
-          subCollections: [{ collection: "following", doc: match.params.id }],
+          subcollections: [{ collection: "following", doc: match.params.id }],
           storeAs: "following"
         }
       ]
@@ -23,7 +23,7 @@ export const userDetailQuery = ({ auth, userUid, match }) =>
         {
           collection: "users",
           doc: auth.uid,
-          subCollections: [{ collection: "photos" }],
+          subcollections: [{ collection: "photos" }],
           storeAs: "photos"
         }
       ]

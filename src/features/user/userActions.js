@@ -210,3 +210,7 @@ export const getUserEvents = (userUid, activeTab) => async (
     dispatch(asyncActionError())
   }
 }
+
+export const followUser = profile => {}
+
+export const unfollowUser = profile => {}
