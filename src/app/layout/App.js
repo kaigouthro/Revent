@@ -8,11 +8,12 @@ import Settings from "../../features/user/Settings"
 import UserDetail from "../../features/user/UserDetail"
 import EventDashboard from "../../features/events/EventDashboard"
 import EventDetail from "../../features/events/EventDetail"
-import EventForm from "../../features/events/EventForm/ManageEventForm"
+import ManageEventForm from "../../features/events/EventForm/ManageEventForm"
 import CreateEventForm from "../../features/events/EventForm/CreateEventForm"
 import ModalManager from "../../features/modals/ModalManager"
 import NotFound from "./NotFound"
 import Home from "../../features/home"
+import { AuthenticatedUser } from "../../features/auth/authWrapper"
 
 const App = () => (
   <div>
@@ -31,11 +32,23 @@ const App = () => (
               <Redirect exact from="/" to="/events" />
               <Route path="/events" component={EventDashboard} />
               <Route path="/event/:id" component={EventDetail} />
-              <Route path="/manage/:id" component={EventForm} />
-              <Route path="/createEvent" component={CreateEventForm} />
-              <Route path="/people" component={PeopleDashboard} />
-              <Route path="/settings" component={Settings} />
-              <Route path="/profile/:id" component={UserDetail} />
+              <Route
+                path="/manage/:id"
+                component={AuthenticatedUser(ManageEventForm)}
+              />
+              <Route
+                path="/createEvent"
+                component={AuthenticatedUser(CreateEventForm)}
+              />
+              <Route
+                path="/people"
+                component={AuthenticatedUser(PeopleDashboard)}
+              />
+              <Route path="/settings" component={AuthenticatedUser(Settings)} />
+              <Route
+                path="/profile/:id"
+                component={AuthenticatedUser(UserDetail)}
+              />
               <Route component={NotFound} />
             </Switch>
           </Container>
