@@ -81,15 +81,51 @@ export const deletePhoto = photo => async (
 export const setMainPhoto = photo => async (
   dispatch,
   getState,
-  { getFirebase }
+  { getFirebase, getFirestore }
 ) => {
   const firebase = getFirebase()
+  const firestore = getFirestore()
+  const user = firebase.auth().currentUser
+  const today = new Date(Date.now())
+  let userDocRef = firestore.collection("users").doc(user.uid)
+  let eventAttendeeRef = firestore.collection("event_attendees")
+
   try {
-    return await firebase.updateProfile({
+    dispatch(asyncActionStart())
+    let batch = firestore.batch()
+
+    await batch.update(userDocRef, {
       photoURL: photo.url
     })
+
+    let eventQuery = await eventAttendeeRef
+      .where("userUid", "==", user.uid)
+      .where("eventDate", ">=", today)
+
+    let eventQuerySnap = await eventQuery.get()
+    for (let doc in eventQuerySnap.docs) {
+      let eventDocRef = await firestore
+        .collection("events")
+        .doc(eventQuerySnap.docs[doc].data().eventId)
+
+      let event = await eventDocRef.get()
+      if (event.data().hostUid === user.uid) {
+        batch.update(eventDocRef, {
+          hostPhotoURL: photo.url,
+          [`attendees.${user.uid}.photoURL`]: photo.url
+        })
+      } else {
+        batch.update(eventDocRef, {
+          [`attendees.${user.uid}.photoURL`]: photo.url
+        })
+      }
+    }
+
+    await batch.commit()
+    dispatch(asyncActionFinish())
   } catch (error) {
     console.log(error)
+    dispatch(asyncActionError())
     throw new Error("Problem set the main photo")
   }
 }
