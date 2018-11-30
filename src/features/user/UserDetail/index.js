@@ -4,6 +4,7 @@ import { compose } from "redux"
 import { firestoreConnect, isEmpty } from "react-redux-firebase"
 import LoadingSpinner from "../../../app/layout/LoadingSpinner"
 import { Grid } from "semantic-ui-react"
+import { toastr } from "react-redux-toastr"
 
 import UserDetailEvents from "./UserDetailEvents"
 import UserDetailHeader from "./UserDetailHeader"
@@ -16,21 +17,21 @@ import { userDetailQuery } from "../userDetailQuery"
 
 class UserDetail extends Component {
   async componentDidMount() {
-    const { getUserEvents, auth, match } = this.props
-    if (auth.uid === match.params.id) {
-      await getUserEvents(auth.uid)
-    } else {
-      await getUserEvents(match.params.id)
+    const { firestore, getUserEvents, match } = this.props
+    let user = await firestore.get({
+      collection: "users",
+      doc: match.params.id
+    })
+    if (!user.exists) {
+      toastr.error("Not found", "This is not the user you're looking for")
+      this.props.history.push("/error")
     }
+    await getUserEvents(match.params.id)
   }
 
   changeTab = async (e, { activeIndex }) => {
-    const { getUserEvents, auth, match } = this.props
-    if (auth.uid === match.params.id) {
-      await getUserEvents(auth.uid, activeIndex)
-    } else {
-      await getUserEvents(match.params.id, activeIndex)
-    }
+    const { getUserEvents, match } = this.props
+    await getUserEvents(match.params.id, activeIndex)
   }
 
   render() {
