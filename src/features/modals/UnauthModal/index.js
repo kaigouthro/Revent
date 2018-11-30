@@ -8,10 +8,8 @@ import { openModal, closeModal } from "../modalActions"
 class UnauthModal extends Component {
   handleModalClose = () => {
     if (this.props.location.pathname.includes("/event")) {
-      debugger
       this.props.closeModal()
     } else {
-      debugger
       this.props.history.goBack()
       this.props.closeModal()
     }

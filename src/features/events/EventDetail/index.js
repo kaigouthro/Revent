@@ -15,7 +15,14 @@ import {
 } from "../../../app/common/utils/helpers"
 import { goingToEvent, cancellGoingEvent } from "../../user/userActions"
 import { addEventComment } from "../eventActions"
+import { openModal } from "../../modals/modalActions"
 
+const actions = {
+  goingToEvent,
+  cancellGoingEvent,
+  addEventComment,
+  openModal
+}
 class EventDetail extends Component {
   async componentDidMount() {
     const { firestore, match } = this.props
@@ -38,12 +45,14 @@ class EventDetail extends Component {
       cancellGoingEvent,
       addEventComment,
       eventChat,
+      openModal,
       loading
     } = this.props
     const attendees = event && event.attendees && objToArray(event.attendees)
     const isHost = event.hostUid === auth.uid
     const isGoing = attendees && attendees.some(a => a.id === auth.uid)
     const commentTree = !isEmpty(eventChat) && createDataTree(eventChat)
+    const authenticated = auth.isLoaded && !auth.isEmpty
 
     return (
       <Grid>
@@ -53,6 +62,8 @@ class EventDetail extends Component {
             isHost={isHost}
             isGoing={isGoing}
             loading={loading}
+            authenticated={authenticated}
+            openModal={openModal}
             goingToEvent={goingToEvent}
             cancellGoingEvent={cancellGoingEvent}
           />
@@ -87,7 +98,7 @@ export default compose(
   withFirestore,
   connect(
     mapStateToProps,
-    { goingToEvent, cancellGoingEvent, addEventComment }
+    actions
   ),
   firebaseConnect(({ match }) => [`event_chat/${match.params.id}`])
 )(EventDetail)

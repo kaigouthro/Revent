@@ -16,6 +16,8 @@ const EventDetailHeader = ({
   isHost,
   isGoing,
   loading,
+  authenticated,
+  openModal,
   goingToEvent,
   cancellGoingEvent
 }) => (
@@ -50,10 +52,18 @@ const EventDetailHeader = ({
           <Button onClick={() => cancellGoingEvent(event)}>
             Cancel My Place
           </Button>
-        ) : (
+        ) : authenticated ? (
           <Button
             loading={loading}
             onClick={() => goingToEvent(event)}
+            color="teal"
+          >
+            JOIN THIS EVENT
+          </Button>
+        ) : (
+          <Button
+            loading={loading}
+            onClick={() => openModal("UnauthModal")}
             color="teal"
           >
             JOIN THIS EVENT
