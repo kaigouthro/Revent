@@ -58,7 +58,7 @@ class EventForm extends Component {
       .catch(error => console.error("Error", error))
   }
 
-  onFormSubmit = values => {
+  onFormSubmit = async values => {
     const {
       initialValues,
       event,
@@ -73,10 +73,10 @@ class EventForm extends Component {
       if (Object.keys(values.venueLatLng).length === 0) {
         values.venueLatLng = event.venueLatLng
       }
-      updateEvent(values)
+      await updateEvent(values)
       history.goBack()
     } else {
-      createEvent(values)
+      await createEvent(values)
       history.push("/events")
     }
   }
