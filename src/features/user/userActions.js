@@ -148,6 +148,7 @@ export const goingToEvent = event => async (
   }
 
   try {
+    dispatch(asyncActionStart())
     await firestore.update(`events/${event.id}`, {
       [`attendees.${user.uid}`]: attendee
     })
@@ -157,9 +158,11 @@ export const goingToEvent = event => async (
       eventDate: event.date,
       host: false
     })
+    dispatch(asyncActionFinish())
     toastr.success("Success", "You have signed up for the event")
   } catch (error) {
     console.log(error)
+    dispatch(asyncActionError())
     toastr.error("Oops!", "Problem signing up to the even")
   }
 }
