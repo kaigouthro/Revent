@@ -82,7 +82,14 @@ class EventForm extends Component {
   }
 
   render() {
-    const { event, invalid, submitting, pristine, cancelToggle } = this.props
+    const {
+      event,
+      invalid,
+      submitting,
+      pristine,
+      cancelToggle,
+      loading
+    } = this.props
     return (
       <Grid>
         <Script
@@ -148,11 +155,16 @@ class EventForm extends Component {
               <Button
                 positive
                 type="submit"
+                loading={loading}
                 disabled={invalid || submitting || pristine}
               >
                 Submit
               </Button>
-              <Button type="button" onClick={this.props.history.goBack}>
+              <Button
+                type="button"
+                loading={loading}
+                onClick={this.props.history.goBack}
+              >
                 Cancel
               </Button>
               {event && (
@@ -174,7 +186,10 @@ class EventForm extends Component {
   }
 }
 
-const mapStateToProps = ({ firestore: { ordered } }, ownProps) => {
+const mapStateToProps = (
+  { firestore: { ordered }, async: { loading } },
+  ownProps
+) => {
   let event = {}
   if (ordered.events && ownProps.match.params) {
     const id = ownProps.match.params.id
@@ -183,7 +198,8 @@ const mapStateToProps = ({ firestore: { ordered } }, ownProps) => {
   // initialValues provides redux-form the initial data to populate with
   return {
     initialValues: event,
-    event
+    event,
+    loading
   }
 }
 
