@@ -3,7 +3,7 @@ import React, { Component } from "react"
 import { reduxForm, Field } from "redux-form"
 import { connect } from "react-redux"
 import { compose } from "redux"
-import { firestoreConnect } from "react-redux-firebase"
+import { firestoreConnect, withFirestore } from "react-redux-firebase"
 import { Grid, Header, Segment, Form, Button } from "semantic-ui-react"
 import moment from "moment"
 import Script from "react-load-script"
@@ -24,6 +24,19 @@ class EventForm extends Component {
     cityLatLng: {},
     venueLatLng: {},
     scriptLoaded: false
+  }
+
+  async componentDidMount() {
+    const { firestore, match } = this.props
+    await firestore.setListener({ collection: "events", doc: match.params.id })
+  }
+
+  async componentWillUnmount() {
+    const { firestore, match } = this.props
+    await firestore.unsetListener({
+      collection: "events",
+      doc: match.params.id
+    })
   }
 
   handleScriptLoad = () => {
@@ -186,14 +199,10 @@ class EventForm extends Component {
   }
 }
 
-const mapStateToProps = (
-  { firestore: { ordered }, async: { loading } },
-  ownProps
-) => {
+const mapStateToProps = ({ firestore: { ordered }, async: { loading } }) => {
   let event = {}
-  if (ordered.events && ownProps.match.params) {
-    const id = ownProps.match.params.id
-    event = ordered.events.find(event => event.id === id)
+  if (ordered.events) {
+    event = ordered.events[0]
   }
   // initialValues provides redux-form the initial data to populate with
   return {
@@ -204,10 +213,10 @@ const mapStateToProps = (
 }
 
 export default compose(
+  withFirestore,
   connect(
     mapStateToProps,
     { createEvent, updateEvent, cancelToggle }
   ),
-  firestoreConnect([{ collection: "events" }]),
   reduxForm({ form: "eventForm", enableReinitialize: true, validate })
 )(EventForm)
