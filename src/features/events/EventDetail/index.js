@@ -3,11 +3,13 @@ import { connect } from "react-redux"
 import { compose } from "redux"
 import { firebaseConnect, withFirestore, isEmpty } from "react-redux-firebase"
 import { Grid } from "semantic-ui-react"
+import { toastr } from "react-redux-toastr"
 
 import EventDetailHeader from "./EventDetailHeader"
 import EventDetailInfo from "./EventDetailInfo"
 import EventDetailChat from "./EventDetailChat"
 import EventDetailSidebar from "./EventDetailSidebar"
+import LoadingSpinner from "../../../app/layout/LoadingSpinner"
 import {
   objToArray,
   objectToArray,
@@ -24,9 +26,17 @@ const actions = {
   openModal
 }
 class EventDetail extends Component {
+  state = { initialLoading: true }
+
   async componentDidMount() {
     const { firestore, match } = this.props
+    const event = await firestore.get(`events/${match.params.id}`)
+    if (!event.exists) {
+      toastr.error("Not found", "This isn't the event you're looking for")
+      this.props.history.push("/error")
+    }
     await firestore.setListener({ collection: "events", doc: match.params.id })
+    this.setState({ initialLoading: false })
   }
 
   async componentWillUnmount() {
@@ -46,13 +56,23 @@ class EventDetail extends Component {
       addEventComment,
       eventChat,
       openModal,
-      loading
+      loading,
+      requesting,
+      match
     } = this.props
-    const attendees = event && event.attendees && objToArray(event.attendees)
+    const attendees =
+      event &&
+      event.attendees &&
+      objToArray(event.attendees).sort((a, b) => a.joinDate - b.joinDate)
     const isHost = event.hostUid === auth.uid
     const isGoing = attendees && attendees.some(a => a.id === auth.uid)
     const commentTree = !isEmpty(eventChat) && createDataTree(eventChat)
     const authenticated = auth.isLoaded && !auth.isEmpty
+    const loadingEvent = requesting[`events/${match.params.id}`]
+
+    if (loadingEvent || this.state.initialLoading) {
+      return <LoadingSpinner inverted={true} />
+    }
 
     return (
       <Grid>
@@ -83,7 +103,11 @@ class EventDetail extends Component {
 }
 
 const mapStateToProps = (
-  { firestore: { ordered }, firebase: { auth, data }, async: { loading } },
+  {
+    firestore: { ordered, status },
+    firebase: { auth, data },
+    async: { loading }
+  },
   { match }
 ) => ({
   event: (ordered.events && ordered.events[0]) || {},
@@ -91,7 +115,8 @@ const mapStateToProps = (
     !isEmpty(data.event_chat) &&
     objectToArray(data.event_chat[match.params.id]),
   auth,
-  loading
+  loading,
+  requesting: status.requesting
 })
 
 export default compose(
@@ -100,5 +125,8 @@ export default compose(
     mapStateToProps,
     actions
   ),
-  firebaseConnect(({ match }) => [`event_chat/${match.params.id}`])
+  firebaseConnect(
+    ({ auth, match }) =>
+      auth.isLoaded && !auth.isEmpty && [`event_chat/${match.params.id}`]
+  )
 )(EventDetail)

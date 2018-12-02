@@ -48,7 +48,7 @@ class UserDetail extends Component {
       eventsLoading
     } = this.props
     const isCurrentUser = auth.uid === match.params.id
-    const isLoading = Object.values(requesting).some(a => a === true)
+    const isLoading = requesting[`users/${match.params.id}`]
     const isFollowing = !isEmpty(following)
 
     if (isLoading) return <LoadingSpinner inverted={true} />
