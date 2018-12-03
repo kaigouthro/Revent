@@ -1,5 +1,7 @@
 # Revents
 
+[![Build Status](https://api.travis-ci.com/thanhtrungit25/Revent.svg?branch=master)](https://travis-ci.com/thanhtrungit25/Revent)
+
 App built with React, Redux & Firestore to create meetup events.
 
 ## Firebase setup
