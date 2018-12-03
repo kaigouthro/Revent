@@ -27,9 +27,9 @@ body {
     rgb(33, 138, 174) 69%,
     rgb(32, 167, 172) 89%
   ) !important;
+  min-height: 100vh;
 }
 .masthead.segment {
-  min-height: 100vh;
   padding: 1em 0 !important;
 }
 .masthead .ui.menu .ui.button,

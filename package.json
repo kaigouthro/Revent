@@ -4,6 +4,7 @@
   "description": "Event organizing app Revents, build with React, Redux, Semantic-UI & Firebase",
   "main": "index.js",
   "scripts": {
+    "clear": "rm -rf ./build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
