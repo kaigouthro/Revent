@@ -80,7 +80,6 @@ export const deletePhoto = photo => async (
 
 export const setMainPhoto = photo => async (
   dispatch,
-  getState,
   { getFirebase, getFirestore }
 ) => {
   const firebase = getFirebase()
@@ -169,7 +168,6 @@ export const goingToEvent = event => async (
 
 export const cancellGoingEvent = event => async (
   dispatch,
-  getState,
   { getFirebase, getFirestore }
 ) => {
   const firebase = getFirebase()
@@ -193,7 +191,6 @@ export const cancellGoingEvent = event => async (
 
 export const getUserEvents = (userUid, activeTab) => async (
   dispatch,
-  getState,
   { getFirestore }
 ) => {
   dispatch(asyncActionStart())
@@ -251,7 +248,6 @@ export const getUserEvents = (userUid, activeTab) => async (
 
 export const followUser = userToFollow => async (
   dispatch,
-  getState,
   { getFirebase, getFirestore }
 ) => {
   const firebase = getFirebase()
@@ -283,7 +279,6 @@ export const followUser = userToFollow => async (
 
 export const unfollowUser = userToUnfollow => async (
   dispatch,
-  getState,
   { getFirebase, getFirestore }
 ) => {
   const firebase = getFirebase()

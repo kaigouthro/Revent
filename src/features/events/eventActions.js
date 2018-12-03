@@ -96,7 +96,6 @@ export const updateEvent = event => async (
 
 export const getEventsForDashboard = lastEvent => async (
   dispatch,
-  getState,
   { getFirebase, getFirestore }
 ) => {
   let today = new Date(Date.now())
